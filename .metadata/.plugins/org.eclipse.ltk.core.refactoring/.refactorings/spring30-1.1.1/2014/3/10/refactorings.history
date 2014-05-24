@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;springbook.user.domain&apos; to &apos;study/src&apos;&#x0D;&#x0A;- Original project: &apos;spring30-1.1.1&apos;&#x0D;&#x0A;- Destination element: &apos;study/src&apos;&#x0D;&#x0A;- Original element: &apos;spring30-1.1.1/src/springbook.user.domain&apos;" description="Copy package" destination="=study/src" element1="/src&lt;springbook.user.domain" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1394262384744" version="1.0"/>
+</session>

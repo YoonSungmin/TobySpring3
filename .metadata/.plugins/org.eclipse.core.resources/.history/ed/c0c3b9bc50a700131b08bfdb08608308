@@ -1,0 +1,39 @@
+package springbook.user.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import springbook.user.domain.User;
+import springbook.user.dao.UserDao;
+
+public class UserDaoTest {
+	public static void main(String args[]) throws ClassNotFoundException, SQLException{
+		//UserDao dao = new DaoFactory().userDao();
+		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+		UesrDao dao = context.getBean("userDao", UserDao.class);
+		dao.del();
+		
+		System.out.println("users table deleted");
+		
+		User user = new User();
+		user.setId("onlylovu");
+		user.setName("윤성민");
+		user.setPassword("fjqm84");
+		
+		dao.add(user);
+		
+		System.out.println("등록성공\n" + "ID  : " + user.getId() + "\n" + "NAME  : " + user.getName() + "\n" +  "PASSWORD  : " + user.getPassword());
+		
+		ArrayList<User> userList = dao.get(user.getId());
+		Iterator<User> userEIterator = userList.iterator();
+		
+		while(userEIterator.hasNext()){
+			User resultUser = (User)userEIterator.next();
+			System.out.println("조회성공\n" + "ID  : " + resultUser.getId() + "\n" + "NAME  : " + resultUser.getName() + "\n" +  "PASSWORD  : " + resultUser.getPassword());
+		}
+	}
+}
