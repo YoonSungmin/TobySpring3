@@ -18,7 +18,7 @@ public class UserDaoTest {
 
 		dao.del();
 		
-		System.out.println("users table deleted");
+		System.out.println("users테이블 삭제");
 		
 		User user = new User();
 		user.setId("onlylovu");
