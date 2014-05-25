@@ -25,42 +25,42 @@ import springbook.learningtest.spring.ioc.bean.Hello;
 @ContextConfiguration("identifier.xml")
 public class BeanIdentifierTest {
 	@Autowired Hello hello;
-	@Resource Hello ÇÏÀÌ;
+	@Resource Hello í•˜ì´;
 	@Resource ApplicationContext ac;
 	@Test public void id() {
 		assertThat(hello, is(notNullValue()));
-		assertThat(ÇÏÀÌ, is(notNullValue()));
-		assertThat(hello, is(ÇÏÀÌ));
+		assertThat(í•˜ì´, is(notNullValue()));
+		assertThat(hello, is(í•˜ì´));
 		assertThat(hello, is(ac.getBean("1234")));
 		assertThat(hello, is(ac.getBean("/hello")));
-		assertThat(hello, is(ac.getBean("Çï·Î¿ì")));
+		assertThat(hello, is(ac.getBean("í—¬ë¡œìš°")));
 		System.out.println("OK5");
 	}
 	
-	@Component("ÇÏÀÌ") static class Hi {	}
-	@Component @Named("ÇÏ¿ìµğ") static class Howdy { @Resource Hi ÇÏÀÌ; }
+	@Component("í•˜ì´") static class Hi {	}
+	@Component @Named("í•˜ìš°ë””") static class Howdy { @Resource Hi í•˜ì´; }
 	@Configuration static class Config {
-		@Bean(name={"¿ï¶ö¶ó", "ÈìÈì"}) 
-		public Howdy lala(Hi ÇÏÀÌ) {
+		@Bean(name={"ìš¸ë„ë¼", "í í "}) 
+		public Howdy lala(Hi í•˜ì´) {
 			Howdy h = new Howdy();
-			h.ÇÏÀÌ = ÇÏÀÌ;
+			h.í•˜ì´ = í•˜ì´;
 			return h;
 		}
 	}
 	
 	@Test public void hi() {
 		AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(Hi.class, Howdy.class, Config.class);
-		Hi ÇÏÀÌ = ac.getBean("ÇÏÀÌ", Hi.class);
-		assertThat(ÇÏÀÌ, is(notNullValue()));
+		Hi í•˜ì´ = ac.getBean("í•˜ì´", Hi.class);
+		assertThat(í•˜ì´, is(notNullValue()));
 		
-		Howdy h = ac.getBean("ÇÏ¿ìµğ", Howdy.class);
-		assertThat(h.ÇÏÀÌ, is(ÇÏÀÌ));
+		Howdy h = ac.getBean("í•˜ìš°ë””", Howdy.class);
+		assertThat(h.í•˜ì´, is(í•˜ì´));
 		
-		Howdy h2 = ac.getBean("¿ï¶ö¶ó", Howdy.class);
-		assertThat(h2.ÇÏÀÌ, is(ÇÏÀÌ));
+		Howdy h2 = ac.getBean("ìš¸ë„ë¼", Howdy.class);
+		assertThat(h2.í•˜ì´, is(í•˜ì´));
 		
-		Howdy h3 = ac.getBean("ÈìÈì", Howdy.class);
-		assertThat(h3.ÇÏÀÌ, is(ÇÏÀÌ));
+		Howdy h3 = ac.getBean("í í ", Howdy.class);
+		assertThat(h3.í•˜ì´, is(í•˜ì´));
 	}
 	
 	
