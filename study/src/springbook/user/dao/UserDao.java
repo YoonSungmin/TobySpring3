@@ -4,35 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+
+import javax.sql.DataSource;
 
 import springbook.user.domain.User;
 
 public class UserDao {
-	private ConnectionMaker connectionMaker;
+	private DataSource dataSource;
 
-//	public UserDao(ConnectionMaker connectionMaker) {
-//		this.connectionMaker = connectionMaker;
-//	}
-	
-	public void setConnectionMaker(ConnectionMaker connectionMaker){
-		this.connectionMaker = connectionMaker;
+	public void setDataSource(DataSource dataSource){
+		this.dataSource = dataSource;
 	}
 
-	public void del() throws ClassNotFoundException, SQLException {
-		Connection c = this.connectionMaker.makeConnection();
-		PreparedStatement ps = c.prepareStatement("delete from users");
-
-		ps.executeUpdate();
-
-		ps.close();
-		c.close();
-	}
-
-	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = this.connectionMaker.makeConnection();
-		PreparedStatement ps = c
-				.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
+	public void add(User user) throws  SQLException {
+		Connection c = this.dataSource.getConnection();
+		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
 		ps.setString(1, user.getId());
 		ps.setString(2, user.getName());
 		ps.setString(3, user.getPassword());
@@ -43,28 +29,47 @@ public class UserDao {
 		c.close();
 	}
 
-	public ArrayList<User> get(String id) throws ClassNotFoundException,
+	public User get(String id) throws 
 			SQLException {
-		Connection c = this.connectionMaker.makeConnection();
-		PreparedStatement ps = c
-				.prepareStatement("select id, name, password from users where id = ?");
+		Connection c = this.dataSource.getConnection();
+		PreparedStatement ps = c.prepareStatement("select id, name, password from users where id = ?");
 		ps.setString(1, id);
 
 		ResultSet rs = ps.executeQuery();
-		ArrayList<User> userList = new ArrayList<User>();
+		User user = new User();
+		
+		rs.next();
 
-		while (rs.next()) {
-			User user = new User();
-			user.setId(rs.getString("id"));
-			user.setName(rs.getString("name"));
-			user.setPassword(rs.getString("password"));
-			userList.add(user);
-		}
+		user.setId(rs.getString("id"));
+		user.setName(rs.getString("name"));
+		user.setPassword(rs.getString("password"));
 
 		rs.close();
 		ps.close();
 		c.close();
 
-		return userList;
+		return user;
+	}
+	
+	public void deleteAll() throws  SQLException {
+		Connection c = this.dataSource.getConnection();
+		PreparedStatement ps = c.prepareStatement("delete from users");
+
+		ps.executeUpdate();
+
+		ps.close();
+		c.close();
+	}
+	
+	public int getCount() throws SQLException {
+		Connection c = this.dataSource.getConnection();
+		PreparedStatement ps = c.prepareStatement("select count(*) from users");
+		
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		
+		int count = rs.getInt(1);
+		
+		return count;
 	}
 }
