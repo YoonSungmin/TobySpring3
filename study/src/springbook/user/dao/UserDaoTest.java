@@ -1,40 +1,98 @@
 package springbook.user.dao;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
+import java.sql.SQLException;
+
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import springbook.user.domain.User;
 
 public class UserDaoTest {
+	
 	public static void main(String args[]) throws ClassNotFoundException, SQLException{
-
-		//ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+		JUnitCore.main("springbook.user.dao.UserDaoTest");
+	}
+	
+	@Test
+	public void addAndGet() throws SQLException{
+		
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 		UserDao dao = context.getBean("userDao", UserDao.class);
-
-		dao.del();
 		
-		System.out.println("usersÅ×ÀÌºí »èÁ¦");
+		User user1= new User("kenshin1", "ìœ¤ì„±ë¯¼1", "1fjqm84");
+		User user2= new User("kenshin2", "ìœ¤ì„±ë¯¼2", "2fjqm84");
 		
-		User user = new User();
-		user.setId("onlylovu");
-		user.setName("À±¼º¹Î");
-		user.setPassword("fjqm84");
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
 		
-		dao.add(user);
+		dao.add(user1);
+		dao.add(user2);
+		assertThat(dao.getCount(), is(2));
 		
-		System.out.println("µî·Ï¼º°ø\n" + "ID  : " + user.getId() + "\n" + "NAME  : " + user.getName() + "\n" +  "PASSWORD  : " + user.getPassword());
+		User userget1 = dao.get(user1.getId());		
+		assertThat(user1.getName(), is(userget1.getName()));
+		assertThat(user1.getPassword(), is(userget1.getPassword()));
 		
-		ArrayList<User> userList = dao.get(user.getId());
-		Iterator<User> userEIterator = userList.iterator();
+		User userget2 = dao.get(user2.getId());		
+		assertThat(user2.getName(), is(userget2.getName()));
+		assertThat(user2.getPassword(), is(userget2.getPassword()));
 		
-		while(userEIterator.hasNext()){
-			User resultUser = (User)userEIterator.next();
-			System.out.println("Á¶È¸¼º°ø\n" + "ID  : " + resultUser.getId() + "\n" + "NAME  : " + resultUser.getName() + "\n" +  "PASSWORD  : " + resultUser.getPassword());
-		}
 	}
+	
+	@Test
+	public void count() throws SQLException{
+
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		
+		UserDao dao = context.getBean("userDao", UserDao.class);
+		
+		User user1= new User("kenshin1", "ï¿½Ë½ï¿½1", "1fjqm84");
+		User user2= new User("kenshin2", "ï¿½Ë½ï¿½2", "2fjqm84");
+		User user3= new User("kenshin3", "ï¿½Ë½ï¿½3", "3fjqm84");		
+		
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		
+		dao.add(user1);
+		assertThat(dao.getCount(), is(1));
+		
+		dao.add(user2);
+		assertThat(dao.getCount(), is(2));
+		
+		dao.add(user3);
+		assertThat(dao.getCount(), is(3));
+		
+	}
+	
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void getUserFailure() throws SQLException{
+
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		
+		UserDao dao = context.getBean("userDao", UserDao.class);
+		
+		User user1= new User("kenshin1", "ï¿½Ë½ï¿½1", "1fjqm84");
+		User user2= new User("kenshin2", "ï¿½Ë½ï¿½2", "2fjqm84");
+		User user3= new User("kenshin3", "ï¿½Ë½ï¿½3", "3fjqm84");		
+		
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		
+		dao.add(user1);
+		assertThat(dao.getCount(), is(1));
+		
+		dao.add(user2);
+		assertThat(dao.getCount(), is(2));
+		
+		dao.add(user3);
+		assertThat(dao.getCount(), is(3));
+		
+	}
+	
 }
