@@ -1,7 +1,7 @@
 package springbook.learningtest.spring.ioc.config;
 
 
-// TODO @Component + @BeanÀ¸·Î ¸¸µé±â
+// TODO @Component + @Beanï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 public class HelloComponentConfig {
 //	@Bean
 //	public Hello hello() {
