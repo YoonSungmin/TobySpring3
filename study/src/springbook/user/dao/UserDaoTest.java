@@ -52,9 +52,9 @@ public class UserDaoTest {
 		
 		UserDao dao = context.getBean("userDao", UserDao.class);
 		
-		User user1= new User("kenshin1", "�˽�1", "1fjqm84");
-		User user2= new User("kenshin2", "�˽�2", "2fjqm84");
-		User user3= new User("kenshin3", "�˽�3", "3fjqm84");		
+		User user1= new User("kenshin1", "윤성민1", "1fjqm84");
+		User user2= new User("kenshin2", "윤성민2", "2fjqm84");
+		User user3= new User("kenshin3", "윤성민3", "3fjqm84");		
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
@@ -77,9 +77,9 @@ public class UserDaoTest {
 		
 		UserDao dao = context.getBean("userDao", UserDao.class);
 		
-		User user1= new User("kenshin1", "�˽�1", "1fjqm84");
-		User user2= new User("kenshin2", "�˽�2", "2fjqm84");
-		User user3= new User("kenshin3", "�˽�3", "3fjqm84");		
+		User user1= new User("kenshin1", "윤성민1", "1fjqm84");
+		User user2= new User("kenshin2", "윤성민2", "2fjqm84");
+		User user3= new User("kenshin3", "윤성민3", "3fjqm84");		
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
