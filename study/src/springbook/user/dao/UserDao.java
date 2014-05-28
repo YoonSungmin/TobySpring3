@@ -7,16 +7,18 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import springbook.user.domain.User;
 
 public class UserDao {
 	private DataSource dataSource;
 
-	public void setDataSource(DataSource dataSource){
+	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
-	public void add(User user) throws  SQLException {
+	public void add(User user) throws SQLException {
 		Connection c = this.dataSource.getConnection();
 		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
 		ps.setString(1, user.getId());
@@ -29,29 +31,32 @@ public class UserDao {
 		c.close();
 	}
 
-	public User get(String id) throws 
-			SQLException {
+	public User get(String id) throws SQLException {
 		Connection c = this.dataSource.getConnection();
 		PreparedStatement ps = c.prepareStatement("select id, name, password from users where id = ?");
 		ps.setString(1, id);
 
 		ResultSet rs = ps.executeQuery();
-		User user = new User();
 		
-		rs.next();
+		User user = null;
 
-		user.setId(rs.getString("id"));
-		user.setName(rs.getString("name"));
-		user.setPassword(rs.getString("password"));
+		if(rs.next()){
+			user = new User();
+			user.setId(rs.getString("id"));
+			user.setName(rs.getString("name"));
+			user.setPassword(rs.getString("password"));
+		}
 
 		rs.close();
 		ps.close();
 		c.close();
+		
+		if(user == null) throw new EmptyResultDataAccessException(1);//결과가 없으면 User는 null 상태 그대로일 것이다. 이를확인해서 예외를 던져준다.
 
 		return user;
 	}
-	
-	public void deleteAll() throws  SQLException {
+
+	public void deleteAll() throws SQLException {
 		Connection c = this.dataSource.getConnection();
 		PreparedStatement ps = c.prepareStatement("delete from users");
 
@@ -60,16 +65,16 @@ public class UserDao {
 		ps.close();
 		c.close();
 	}
-	
+
 	public int getCount() throws SQLException {
 		Connection c = this.dataSource.getConnection();
 		PreparedStatement ps = c.prepareStatement("select count(*) from users");
-		
+
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		
+
 		int count = rs.getInt(1);
-		
+
 		return count;
 	}
 }
